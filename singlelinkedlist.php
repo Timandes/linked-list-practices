@@ -54,13 +54,16 @@ class SingleLinkedList
         return ($item?$item->data:null);
     }
 
-    private function findItem($idx)
+    protected function findItem($idx)
     {
+        $hashtable = [];
         $p = $q = null;
         if ($idx >= 0) {// Positive index
             $p = $this->head;
             $i = 0;
-            while ($p) {
+            while ($p && !isset($hashtable[spl_object_hash($p)])) {
+                $hashtable[spl_object_hash($p)] = 1;
+
                 if ($i == $idx)
                     return $p;
 
@@ -74,7 +77,9 @@ class SingleLinkedList
             $p = $this->head;
             $q = null;
             $i = 0;
-            while ($p) {
+            while ($p && !isset($hashtable[spl_object_hash($p)])) {
+                $hashtable[spl_object_hash($p)] = 1;
+
                 $p = $p->next;
                 ++$i;
                 if ($i == $positiveIdx)

@@ -5,6 +5,22 @@
  * @author Timandes White
  */
 
+class SingleLinkedListWrapper extends SingleLinkedList
+{
+    public function makeRing($idx)
+    {
+        $item = $this->findItem($idx);
+        if (!$item)
+            return;
+
+        $lastItem = $this->findItem(-1);
+        if (!$lastItem)
+            return;
+
+        $lastItem->next = $item;
+    }
+}
+
 /**
  * Single Linked List Test
  */
@@ -78,6 +94,17 @@ class SingleLinkedListTest extends PHPUnit_Framework_TestCase
             $list->add($v);
         $expected = 3;
         $actual = $list->find(-1);
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testFindInRing()
+    {
+        $list = new SingleLinkedListWrapper();
+        for ($i=0; $i<100; $i++)
+            $list->add($i);
+        $list->makeRing(80);
+        $expected = 88;
+        $actual = $list->find(88);
         $this->assertEquals($expected, $actual);
     }
 }
